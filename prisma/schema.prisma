@@ -43,9 +43,58 @@ model Item{
   quantity Int @default(0)
   price Decimal @db.Decimal(10,0) @default(0.00)
   discount Decimal @db.Decimal(5,2) @default(0.00)
+  unique String @db.VarChar(20) @default("pcs")
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 
+
   user User @relation(references: [id], fields: [user_id], onDelete: Cascade)  //user can create a item and another user cant create but can be used by any user
+  sale SaleItem[]
+
+}
+
+model CostumerVender{
+  @@map("customer_vender")
+  id Int @id @default(autoincrement())
+  name String 
+  email String? @db.VarChar(100)
+  phone Int? @db.MediumInt
+  street_address String? @db.VarChar(100)
+  city String? @db.VarChar(100)
+  province String? @db.VarChar(100)
+  zip_code Int?
+  is_vender Boolean @default(false)
+
+  sale Sale[]
+}
+
+model Sale{
+  @@map("sale")
+
+  id Int @id @default(autoincrement())
+  customer_id Int
+  order_date DateTime
+  created_at DateTime @default(now())
+  Updated_at DateTime @default(now())
+
+  customer CostumerVender @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  item SaleItem[]
   
+}
+
+model SaleItem{
+  @@map("sale_item")
+
+  id Int @id @default(autoincrement())
+  sale_id Int
+  item_id Int
+  quantity Int
+  price Decimal @db.Decimal(10,2) @default(0.00)
+  discount Decimal @db.Decimal(10,2) @default(0.00)
+  tax Decimal @db.Decimal(10,2) @default(0.00)
+  sub_total Decimal @db.Decimal(15,2) @default(0.00)
+
+  sale Sale @relation( fields: [sale_id], references: [id])
+  item Item @relation( fields: [item_id], references: [id])
+
 }

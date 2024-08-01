@@ -23,7 +23,7 @@ export class ItemsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+  update(@Param('id') id: number, @Body() updateItemDto: UpdateItemDto) {
     return this.itemsService.update(+id, updateItemDto);
   }
 

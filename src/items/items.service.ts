@@ -31,23 +31,27 @@ export class ItemsService {
     return this.checkIfItemExistByName('id');
   }
 
-  async update(name: string, updateItemDto: UpdateItemDto) {
-    await this.checkIfItemExists(name);
-    const itemExist = await this.checkIfItemExistByName(name)
+  async update(id: number, updateItemDto: UpdateItemDto) {
+    await this.checkIfItemExists(id);
+    const itemExist = await this.checkIfItemExistByName(updateItemDto.name, id)
     
     if (!itemExist) {
       throw new BadRequestException(` Item${updateItemDto.name} already exists `)
     }
-    return this.prismaService.item.update({where:{name,},data:updateItemDto})
+
+    return this.prismaService.item.update({
+      where: { id, },
+      data: updateItemDto,
+    })
   }
 
   remove(id: number) {
     return ` #${id} item has been removed`;
   }
 
-  private async checkIfItemExists(name:string): Promise<ItemEntity>{
+  private async checkIfItemExists(id: number): Promise<ItemEntity>{
     const item = await this.prismaService.item
-      .findFirst({ where: { name } });
+      .findFirst({ where: { id } });
     if (!item) {
       throw new NotFoundException();
     }
