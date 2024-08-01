@@ -29,6 +29,23 @@ model User{
   updated_at DateTime @default(now())
 
   role Role @relation(fields: [role_id], references: [id], onDelete: Cascade )
+  items Item[]
 
   @@map("users")
+}
+model Item{
+  @@map ("items")
+
+  id Int @id @default(autoincrement())
+  user_id Int
+  name String @unique
+  description String? @db.Text
+  quantity Int @default(0)
+  price Decimal @db.Decimal(10,0) @default(0.00)
+  discount Decimal @db.Decimal(5,2) @default(0.00)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)  //user can create a item and another user cant create but can be used by any user
+  
 }

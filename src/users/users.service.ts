@@ -13,6 +13,9 @@ export class UsersService {
   ) {}
   
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    console.log("sdf")
+
+    console.log({createUserDto})
      const checkUserExists = await this.prismaService.user
       .findUnique({ where: { email : createUserDto.email } })
     
@@ -33,7 +36,8 @@ export class UsersService {
     })
   }
 
-  async findAll():Promise<UserEntity[]>  {
+  async findAll(): Promise<UserEntity[]>  {
+    console.log("fetch")
     return this.prismaService.user.findMany({
       include: {
         role: true,
@@ -41,7 +45,8 @@ export class UsersService {
     });
   }
 
-  async findOne(id: number):Promise<UserEntity> {
+  async findOne(id: number): Promise<UserEntity> {
+    console.log({id})
     const user = await this.prismaService.user.findFirst({
       where: { id },include: {
         role: true,

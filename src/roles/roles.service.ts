@@ -72,6 +72,6 @@ export class RolesService {
     if (id) {
       return role ? role.id === id : true;
     }
-    return !!this.checkIfRoleExists;
+    return !!role;
   }
 }
