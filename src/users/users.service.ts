@@ -13,9 +13,6 @@ export class UsersService {
   ) {}
   
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    console.log("sdf")
-
-    console.log({createUserDto})
      const checkUserExists = await this.prismaService.user
       .findUnique({ where: { email : createUserDto.email } })
     
